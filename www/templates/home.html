@@ -1,0 +1,31 @@
+<ion-view title="Home">
+
+  <ion-nav-buttons side="right">
+    <!--<button ng-click="loadMap();" class="button button-icon icon ion-map"></button> -->
+    <a class="button button-clear button-assertive" href="#/tab/home/map">Map</a>
+  </ion-nav-buttons>
+
+  <ion-content>
+
+    <div class="list list-inset">
+      <label class="item item-input item-select">
+        <div class="input-label">
+          Select City
+        </div>
+        <select>
+          <option selected>Toronto</option>
+        </select>
+      </label>
+      <label class="item item-input">
+        <input type="text" placeholder="Establishment Name">
+      </label>
+    </div>
+    <div class="list list-inset">
+      <ion-list>
+        <ion-item ng-repeat="facility in facilitylist" type="item-text-wrap" href="#/tab/home/facility/{{facility.id}}">
+          {{facility.name}}
+        </ion-item>
+      </ion-list>
+      </div>
+  </ion-content>
+</ion-view>

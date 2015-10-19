@@ -1,0 +1,83 @@
+<!--
+  This template loads for the 'tab.friend-detail' state (app.js)
+  'friend' is a $scope variable created in the FriendsCtrl controller (controllers.js)
+  The FriendsCtrl pulls data from the Friends service (service.js)
+  The Friends service returns an array of friend data
+-->
+<ion-view title="{{facility.name}}">
+  <ion-content has-header="true" padding="true">
+
+    <div class="list card">
+
+      <div class="item item-avatar">
+
+        <h1>{{facility.name}}</h1>
+        Address here..
+
+      </div>
+
+      <div class="item item-body">
+
+        <div class="card">
+          <div class="item item-divider">
+            Inspection Details
+          </div>
+          <div class="item item-text-wrap">
+            If there are INFRACTION_DETAILS....
+          </div>
+
+          <div class="list">
+
+            <div class="item item-divider item-icon-left">
+              <i class="ion-ios-checkmark-outline pass-icon"></i>
+              October 24 2015 - <b>Pass</b>
+            </div>
+            <a class="item item-icon-left" href="#">
+                No infractions were found..
+            </a>
+
+            <div class="item item-divider item-icon-left">
+              <i class="ion-ios-close-outline fail-icon"></i>
+              Jan 24 2015 - <b>Failed</b>
+            </div>
+            <a class="item item-icon-left" href="#">
+              Infractions were found..
+            </a>
+
+          </div>
+
+          <div class="row responsive-sm">
+            <div class="col"><b>Category</b></div>
+            <div class="col">Operator fail to provide accurate indicating thermometer(s)</div>
+            <div class="col"><b>Severity</b></div>
+            <div class="col">Significant</div>
+            <div class="col"><b>Action</b></div>
+            <div class="col">Notice to Comply, assess on re-inspection</div>
+
+          </div>
+
+
+        </div>
+
+
+      </div>
+
+      <div class="item tabs tabs-secondary tabs-icon-left">
+        <a class="tab-item" href="#">
+          <i class="icon ion-social-facebook"></i>
+          Share
+        </a>
+        <a class="tab-item" href="#">
+          <i class="icon ion-social-twitter"></i>
+          Tweet
+        </a>
+        <a class="tab-item" href="#/tab/home/report">
+          <i class="icon ion-email"></i>
+          Report
+        </a>
+      </div>
+
+    </div>
+
+  </ion-content>
+</ion-view>
