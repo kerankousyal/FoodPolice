@@ -110,130 +110,56 @@ console.log('AlertsCtrl');
 })
 
 .controller('MapController',
-  [ '$scope',
-    '$cordovaGeolocation',
-    '$stateParams',
-    '$ionicModal',
-    '$ionicPopup',
-    'LocationsService',
-    'InstructionsService',
-    '$location',
-    '$http',
-    function(
-      $scope,
-      $cordovaGeolocation,
-      $stateParams,
-      $ionicModal,
-      $ionicPopup,
-      LocationsService,
-      InstructionsService,
-      $location,
-      $http
-    ) {
+  [ "$scope", "leafletData", function($scope, leafletData) {
+//sample data values for populate map
+    var data = [
+      {"loc":[41.575330,13.102411], "title":"aquamarine"},
+      {"loc":[41.575730,13.002411], "title":"black"},
+      {"loc":[41.807149,13.162994], "title":"blue"},
+      {"loc":[41.507149,13.172994], "title":"chocolate"},
+      {"loc":[41.847149,14.132994], "title":"coral"},
+      {"loc":[41.219190,13.062145], "title":"cyan"},
+      {"loc":[41.344190,13.242145], "title":"darkblue"},
+      {"loc":[41.679190,13.122145], "title":"darkred"},
+      {"loc":[41.329190,13.192145], "title":"darkgray"},
+      {"loc":[41.379290,13.122545], "title":"dodgerblue"},
+      {"loc":[41.409190,13.362145], "title":"gray"},
+      {"loc":[41.794008,12.583884], "title":"green"},
+      {"loc":[41.805008,12.982884], "title":"greenyellow"},
+      {"loc":[41.536175,13.273590], "title":"red"},
+      {"loc":[41.516175,13.373590], "title":"rosybrown"},
+      {"loc":[41.506175,13.173590], "title":"royalblue"},
+      {"loc":[41.836175,13.673590], "title":"salmon"},
+      {"loc":[41.796175,13.570590], "title":"seagreen"},
+      {"loc":[41.436175,13.573590], "title":"seashell"},
+      {"loc":[41.336175,13.973590], "title":"silver"},
+      {"loc":[41.236175,13.273590], "title":"skyblue"},
+      {"loc":[41.546175,13.473590], "title":"yellow"},
+      {"loc":[41.239190,13.032145], "title":"white"}
+    ];
 
-      var addressPointsToMarkers = function(points) {
-        return points.map(function(ap) {
-          return {
-            layer: 'realworld',
-            lat: ap[0],
-            lng: ap[1]
-          };
-        });
-      };
+    var map = new L.Map('map', {zoom: 9, center: new L.latLng(data[0].loc) });	//set center from first location
 
-      angular.extend($scope, {
-        center: {
-          lat: 43.7181557,
-          lng: -79.5181422,
-          zoom: 11
-        },
-        events: {
-          map: {
-            enable: ['moveend', 'popupopen', 'tap'],
-            logic: 'emit'
-          },
-          marker: {
-            enable: [],
-            logic: 'emit'
-          }
-        },
-        layers: {
-          baselayers: {
-            mapbox_light: {
-              name: 'Mapbox Light',
-              url: 'http://api.tiles.mapbox.com/v4/{mapid}/{z}/{x}/{y}.png?access_token={apikey}',
-              type: 'xyz',
-              layerOptions: {
-                apikey: 'pk.eyJ1IjoiYnVmYW51dm9scyIsImEiOiJLSURpX0pnIn0.2_9NrLz1U9bpwMQBhVk97Q',
-                mapid: 'bufanuvols.lia22g09'
-              },
-              layerParams: {
-                showOnSelector: false
-              }
-            }
-          },
-            layerParams: {
-              showOnSelector: false
-            },
-          overlays: {
-            realworld: {
-              name: "Real world data",
-              type: "markercluster",
-              visible: true
-            },
-            search: {
-              name: 'search',
-              type: 'group',
-              visible: true,
-              layerParams: {
-                showOnSelector: false
-              }
-            }
-          },
-          controls: {},
-          markers: {}
-        }
-      });
+    map.addLayer(new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'));	//base layer
 
-      $http.get("data/address.json").success(function(data) {
-        $scope.markers = addressPointsToMarkers(data);
-      });
+    var markersLayer = new L.LayerGroup();	//layer contain searched elements
+    map.addLayer(markersLayer);
 
+    map.addControl( new L.Control.Search({
+      container: 'findbox',
+      layer: markersLayer,
+      initial: false,
+      collapsed: false
+    }) );
+    //inizialize search control
 
+    ////////////populate map with markers from sample data
+    for(i in data) {
+      var title = data[i].title,	//value searched
+        loc = data[i].loc,		//position found
+        marker = new L.Marker(new L.latLng(loc), {title: title} );//se property searched
+      marker.bindPopup('title: '+ title );
+      markersLayer.addLayer(marker);
+    }
 
-    /*$ionicModal.fromTemplateUrl('templates/addLocation.html', {
-    scope: $scope,
-    animation: 'slide-in-up'
-    }).then(function(modal) {
-    $scope.modal = modal;
-    });
-*/
-    /*/!**
-       * Center map on user's current position
-       *!/
-      $scope.locate = function(){
-
-        $cordovaGeolocation
-          .getCurrentPosition()
-          .then(function (position) {
-            $scope.map.center.lat  = position.coords.latitude;
-            $scope.map.center.lng = position.coords.longitude;
-            $scope.map.center.zoom = 15;
-
-            $scope.map.markers.now = {
-              lat:position.coords.latitude,
-              lng:position.coords.longitude,
-              message: "You Are Here",
-              focus: true,
-              draggable: false
-            };
-
-          }, function(err) {
-            // error
-            console.log("Location error!");
-            console.log(err);
-          });
-
-      };*/
-
-    }]);
+  }]);
