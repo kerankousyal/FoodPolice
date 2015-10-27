@@ -7,7 +7,7 @@
 // 'starter.controllers' is found in controllers.js
 angular.module('starter', ['ionic', 'starter.controllers', 'starter.services','leaflet-directive', 'ngCordova', 'igTruncate'])
 
-.run(function($ionicPlatform) {
+.run(function($ionicPlatform, $cordovaPush) {
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
@@ -19,7 +19,10 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services','l
       StatusBar.styleDefault();
     }
   });
-})
+
+
+
+  })
 
 .config(function($stateProvider, $urlRouterProvider) {
 
