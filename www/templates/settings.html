@@ -1,15 +1,32 @@
 <ion-view title="Settings">
-  <ion-content class="padding">
-    <div class="text-center padding">
-      <button ng-disabled="registerDisabled" class="button button-bar-inline button-balanced" ng-click="register()">Register</button>
+  <ion-content >
+
+
+    <div class="list">
+
+      <ion-toggle ng-model="pushNotification.checked" ng-change="pushNotificationChange()" toggle-class="toggle-positive">Push Notifications</ion-toggle>
+
+      <a class="item item-icon-left" href="#/tab/settings/about">
+        <i class="icon ion-ios-person-outline"></i>
+        About Us
+      </a>
+      <a class="item item-icon-left" href="#/tab/settings/contact">
+        <i class="icon ion-ios-email-outline"></i>
+        Contact Us
+      </a>
+
+      </div>
+
+
+      <!--<button ng-disabled="registerDisabled" class="button button-bar-inline button-balanced" ng-click="register()">Register</button>
       <button ng-disabled="!registerDisabled" class="button button-bar-inline button-balanced" ng-click="unregister()">Unregister</button>
-    </div>
+
     <p>Device Token</p>
     <textarea readonly>{{regId}}</textarea>
     <ion-list>
       <ion-item ng-repeat="notification in notifications track by $index" type="item-content">
         {{notification}}
       </ion-item>
-    </ion-list>
+    </ion-list>-->
   </ion-content>
 </ion-view>

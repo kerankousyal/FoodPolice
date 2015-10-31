@@ -8,7 +8,7 @@
       </div>
 
       <label class="item item-input">
-        <input type="text" placeholder="First Name">
+        <input type="text" ng-model="user.name" placeholder="First Name">
       </label>
 
       <label class="item item-input">
@@ -19,20 +19,17 @@
         <input type="text" placeholder="Email">
       </label>
 
-      <a class="item item-icon-left" href="#" ng-click="addImage()">
-        <i class="icon ion-paperclip"></i>
-        Attach document
-      </a>
 
 
-      <textarea class="report-textarea" placeholder="Enter content here.." rows="10">
+
+      <button class="button icon-left ion-paperclip button-positive" ng-click="takePhoto()">Attach Image</button>
+
+      <textarea class="report-textarea" ng-model="user.content" placeholder="Enter content here.." rows="10">
       </textarea>
 
       </div>
 
-    <button class="button button-block button-dark" >
-      <button class="button" ng-click="shareAnywhere()">Share anywhere</button>
-      <button class="button" ng-click="shareViaFacebook('ionic share facebook test', null, '')">Share on Facebook</button>
+    <button class="button button-block button-positive" ng-click="UploadDoc(user)">
       Submit
     </button>
   </ion-content>

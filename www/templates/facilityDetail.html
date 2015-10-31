@@ -8,75 +8,64 @@
   <ion-content has-header="true" padding="true">
 
     <div class="list card">
-
-      <div class="item item-avatar">
-
-        <h1>{{facility.name}}</h1>
-        Address here..
-
+      <div class="item item-avatar" >
+        <img src="img/{{facility.ESTABLISHMENT_STATUS}}.png" ></img>
+        <h2 ng-class="{'green': facility.ESTABLISHMENT_STATUS == 'Pass',
+                                                    'orange': facility.ESTABLISHMENT_STATUS == 'ConditionalPass',
+                                                    'red': facility.ESTABLISHMENT_STATUS == 'Failed',
+                                                    'gray': facility.ESTABLISHMENT_STATUS == '' } ">  {{facility.ESTABLISHMENT_NAME}}</h2>
+        <p>{{facility.ESTABLISHMENT_ADDRESS}}</p>
       </div>
 
       <div class="item item-body">
+        <div class="item tabs tabs-icon-left">
+          <a class="tab-item" href="#" ng-click="shareAnywhere()">
+            <i class="icon ion-ios-upload-outline"></i>
+            Share
+          </a>
+          <a class="tab-item" href="#">
 
-        <div class="card">
-          <div class="item item-divider">
-            Inspection Details
+          </a>
+          <a class="tab-item" href="#/tab/home/report">
+            <i class="icon ion-ios-email-outline"></i>
+            Report
+          </a>
+        </div>
+        <div class="card" ng-repeat="inspection in facility.inspections">
+
+
+          <div class="item item-divider" >
+            <div ng-class="{'green': inspection.ESTABLISHMENT_STATUS == 'Pass',
+                                                    'orange': inspection.ESTABLISHMENT_STATUS == 'ConditionalPass',
+                                                    'red': inspection.ESTABLISHMENT_STATUS == 'Failed',
+                                                    'gray': inspection.ESTABLISHMENT_STATUS == '' } ">
+              <i class="ion-ios-checkmark-outline"></i>  {{inspection.ESTABLISHMENT_STATUS}} <b>{{inspection.INSPECTION_YEAR}}</b></div>
           </div>
-          <div class="item item-text-wrap">
-            If there are INFRACTION_DETAILS....
-          </div>
 
-          <div class="list">
-
-            <div class="item item-divider item-icon-left">
-              <i class="ion-ios-checkmark-outline pass-icon"></i>
-              October 24 2015 - <b>Pass</b>
+          <div class="item item-text-wrap" ng-repeat="item in inspection.infractions">
+            <div class="row responsive-sm" >
+              <div class="col" ng-class="{'green': item.SEVERITY == 'M - Minor',
+                                                    'orange': item.SEVERITY == 'S - Significant',
+                                                    'red': item.SEVERITY == 'C - Crucial',
+                                                    'gray': item.SEVERITY == 'NA - Not Applicable' } ">
+                <i class="ion-ios-compose-outline"></i>  {{item.SEVERITY}}</div>
+              <div class="col" style="text-align: right"><b>Date: </b>{{item.INSPECTION_DATE}}</div>
             </div>
-            <a class="item item-icon-left" href="#">
-                No infractions were found..
-            </a>
-
-            <div class="item item-divider item-icon-left">
-              <i class="ion-ios-close-outline fail-icon"></i>
-              Jan 24 2015 - <b>Failed</b>
+            <div class="row responsive-sm" ng-class="{'hideElement': item.INFRACTION_DETAILS!= ''}">
+              <div class="col"><i>No observation recorded. </i></div>
             </div>
-            <a class="item item-icon-left" href="#">
-              Infractions were found..
-            </a>
-
+            <div class="row responsive-sm" ng-class="{'hideElement': item.INFRACTION_DETAILS== ''}">
+              <div class="col col-20"><b>Details: </b></div>
+              <div class="col col-80">{{item.INFRACTION_DETAILS}}</div>
+            </div>
+            <div class="row responsive-sm" ng-class="{'hideElement': item.ACTION== ''}">
+              <div class="col col-20"><b>Action: </b></div>
+              <div class="col col-80">{{item.ACTION}}</div>
+            </div>
           </div>
-
-          <div class="row responsive-sm">
-            <div class="col"><b>Category</b></div>
-            <div class="col">Operator fail to provide accurate indicating thermometer(s)</div>
-            <div class="col"><b>Severity</b></div>
-            <div class="col">Significant</div>
-            <div class="col"><b>Action</b></div>
-            <div class="col">Notice to Comply, assess on re-inspection</div>
-
-          </div>
-
 
         </div>
-
-
       </div>
-
-      <div class="item tabs tabs-secondary tabs-icon-left">
-        <a class="tab-item" href="#">
-          <i class="icon ion-social-facebook"></i>
-          Share
-        </a>
-        <a class="tab-item" href="#">
-          <i class="icon ion-social-twitter"></i>
-          Tweet
-        </a>
-        <a class="tab-item" href="#/tab/home/report">
-          <i class="icon ion-email"></i>
-          Report
-        </a>
-      </div>
-
     </div>
 
   </ion-content>

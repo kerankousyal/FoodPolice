@@ -1,37 +1,6 @@
-<style>
-  #findbox {
-    background: #eee;
-    border-radius:.125em;
-    border:2px solid #1978cf;
-    box-shadow: 0 0 8px #999;
-    margin-bottom: 10px;
-    padding: 2px 0;
-    width: 600px;
-    height: 26px;
-  }
-  .search-tooltip {
-    width: 200px;
-  }
-  .leaflet-control-search .search-cancel {
-    position: static;
-    float: left;
-    margin-left: -22px;
-  }
-</style>ß
 <ion-view title="Map">
-  <ion-nav-buttons side="right">
 
-    <button ng-click="locate();" class="button button-icon icon ion-pinpoint"></button>
-  </ion-nav-buttons>
-<ion-content has-header="true" has-tabs="true" overflow-scroll="true">
-
-  <div id="findbox"></div>
-  <div id="map"></div>
-
-  <div id="post-it">
-    <b>Search values:</b><br />
-    aquamarine, black, blue, cyan, darkblue, darkred, darkgray, dodgerblue, gray, green, red, skyblue, yellow, white ...
-  </div>
-
-</ion-content>
+  <ion-content data-tap-disabled="true" has-header="true" has-tabs="true" overflow-scroll="true">
+    <div id="map"></div>
+  </ion-content>
 </ion-view>

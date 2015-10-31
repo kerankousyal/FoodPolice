@@ -1,92 +1,93 @@
 angular.module('starter.controllers', ['leaflet-directive'])
 
-.controller('AlertsCtrl', function($scope) {
+.controller('AlertsCtrl', function($scope,$http,  $cordovaSocialSharing,$ionicPlatform, $ionicLoading) {
 
 console.log('AlertsCtrl');
 
+    $scope.init = function() {
+
+      $ionicLoading.show({
+        noBackdrop: true,
+        template: '<p class="item-icon-left">Loading Alerts...<ion-spinner icon="lines"/></p>'
+      });
+
+      $http.get("http://ajax.googleapis.com/ajax/services/feed/load", { params: { "v": "1.0", "q": "http://active.inspection.gc.ca/eng/util/newrsse.asp?cid=40" ,"num" : 10} })
+        .success(function(data) {
+
+          $ionicLoading.hide();
+
+
+          $scope.rssTitle = data.responseData.feed.title;
+          $scope.rssUrl = data.responseData.feed.feedUrl;
+          $scope.rssSiteUrl = data.responseData.feed.link;
+          $scope.entries = data.responseData.feed.entries;
+        })
+        .error(function(data) {
+          console.log("ERROR: " + data);
+        });
+    }
+
+    $scope.browse = function(v) {
+      window.open(v, "_blank", "location=yes,clearcache=yes");
+    }
+
+    //social sharing
+    $ionicPlatform.ready(function() {
+
+      $scope.shareAnywhere = function(title, link) {
+        $cordovaSocialSharing.share(link, title, "", "");
+      }
+
+
+    });
+
 })
-  .controller('ReportCtrl', function($scope,$ionicPlatform, $cordovaCamera, $cordovaFile, $cordovaSocialSharing) {
+  .controller('ReportCtrl', function($scope,$ionicPlatform, $cordovaCamera, $cordovaFile, $cordovaSocialSharing,$ionicLoading,$ionicScrollDelegate, $timeout, $q,UploadService) {
 
     console.log('ReportCtrl');
 
-    $scope.images = [];
+    $scope.takePhoto = function () {
 
-    $scope.addImage = function() {
-      console.log("add image");
+      $ionicScrollDelegate.scrollTop();
 
-      var options = {
-        destinationType : Camera.DestinationType.FILE_URI,
-        sourceType : Camera.PictureSourceType.CAMERA, // Camera.PictureSourceType.PHOTOLIBRARY
-        allowEdit : false,
-        encodingType: Camera.EncodingType.JPEG,
-        popoverOptions: CameraPopoverOptions,
-      };
-
-
-      // 3
-      $cordovaCamera.getPicture(options).then(function(imageData) {
-
-        // 4
-        onImageSuccess(imageData);
-
-        function onImageSuccess(fileURI) {
-          createFileEntry(fileURI);
-        }
-
-        function createFileEntry(fileURI) {
-          window.resolveLocalFileSystemURL(fileURI, copyFile, fail);
-        }
-
-        // 5
-        function copyFile(fileEntry) {
-          var name = fileEntry.fullPath.substr(fileEntry.fullPath.lastIndexOf('/') + 1);
-          var newName = makeid() + name;
-
-          window.resolveLocalFileSystemURL(cordova.file.dataDirectory, function(fileSystem2) {
-              fileEntry.copyTo(
-                fileSystem2,
-                newName,
-                onCopySuccess,
-                fail
-              );
-            },
-            fail);
-        }
-
-        // 6
-        function onCopySuccess(entry) {
-          $scope.$apply(function () {
-            $scope.images.push(entry.nativeURL);
+      $ionicPlatform.ready(function() {
+        var options = {
+          quality: 100,
+          destinationType: Camera.DestinationType.DATA_URL,
+          sourceType: Camera.PictureSourceType.CAMERA,
+          allowEdit: true,
+          encodingType: Camera.EncodingType.PNG,
+          popoverOptions: CameraPopoverOptions,
+          saveToPhotoAlbum: false
+        };
+        $cordovaCamera.getPicture(options).then(function (imageData) {
+          $ionicLoading.show({
+            template: 'Processing Image',
+            duration: 2000
           });
-        }
+          $scope.image = "data:image/png;base64," + imageData;
 
-        function fail(error) {
-          console.log("fail: " + error.code);
-        }
+        }, function (err) {
+          console.log(err);
+        });
+      }, false);
+    };
 
-        function makeid() {
-          var text = "";
-          var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    $scope.UploadDoc = function (user) {
+      console.log('upload...');
 
-          for (var i=0; i < 5; i++) {
-            text += possible.charAt(Math.floor(Math.random() * possible.length));
-          }
-          return text;
-        }
+      var imageData= { "imageURL": $scope.image, "name" : user.name, "content" : user.content } ;
 
-      }, function(err) {
-        console.log(err);
-      });
-    }
+      UploadService.Upload(imageData)
+                  .then(function (response) {
+                    if (response.success) {
 
-    $scope.urlForImage = function(imageName) {
-      var name = imageName.substr(imageName.lastIndexOf('/') + 1);
-      var trueOrigin = cordova.file.dataDirectory + name;
-
-
-      return trueOrigin;
-    }
-
+                     console.log('image uploaded!');
+                    } else {
+                      console.log('image upload failed!');
+                    }
+                  });
+    };
 
     //social sharing
     $ionicPlatform.ready(function() {
@@ -105,20 +106,71 @@ console.log('AlertsCtrl');
       }
     });
   })
-  .controller('FeedCtrl', function($scope) {
+  .controller('FeedCtrl', function($scope,$ionicPlatform, $cordovaSocialSharing, NewsFeedService) {
 
     console.log('FeedCtrl');
+
+    //get news feed from db
+    $scope.getAllNewsFeeds = function () {
+
+      console.log('loading feeds');
+
+
+      NewsFeedService.getAllFeeds()
+        .then(function (response) {
+          if (response.success) {
+
+            $scope.feedList=response;
+          } else {
+            console.log('get feeds failed!');
+          }
+        });
+    };
+
+    //social sharing
+    $ionicPlatform.ready(function() {
+
+      $scope.shareAnywhere = function(title, link) {
+        $cordovaSocialSharing.share("ionic test", "Test subject", "", "");
+      }
+
+
+    });
+
   })
-.controller('HomeCtrl', function($scope, facilitylist) {
-  $scope.facilitylist = facilitylist.all();
+  .controller('AboutCtrl', function($scope) {
 
+    console.log('AboutCtrl');
+  })
+  .controller('ContactCtrl', function($scope) {
+
+    console.log('ContactCtrl');
+  })
+
+  .controller('HomeCtrl', function($scope, FacilityService) {
     console.log('HomeCtrl');
-})
+    $scope.strsearch = '';
+    $scope.facilitylist = [];
+    $scope.searchFacility = function(strsearch) {
+      console.log('Hello' + strsearch);
+      if (strsearch !='') {
+        $scope.facilitylist = FacilityService.search(strsearch);
+        $scope.strsearch = '';
+      }
+    };
 
-.controller('FacilityDetailCtrl', function($scope, $stateParams, facilitylist) {
+
+
+  })
+
+.controller('FacilityDetailCtrl', function($scope, $stateParams, FacilityService, $cordovaSocialSharing, $ionicPlatform) {
 
     console.log('FacilityDetailCtrl');
-  $scope.facility = facilitylist.get($stateParams.FacilityId);
+    $scope.facility = FacilityService.get($stateParams.FacilityId);
+
+    $scope.shareAnywhere = function() {
+      $cordovaSocialSharing.share("ionic test", "Test subject", "", "");
+    }
 })
 
 .controller('SettingsCtrl', function($scope, $cordovaPush, $cordovaDialogs, $cordovaMedia, $cordovaToast, ionPlatform, $http) {
@@ -126,10 +178,26 @@ console.log('AlertsCtrl');
 
     $scope.notifications = [];
 
-    // call to register automatically upon device ready
-    ionPlatform.ready.then(function (device) {
-      $scope.register();
-    });
+
+    $scope.pushNotificationChange = function() {
+      console.log('Push Notification Change', $scope.pushNotification.checked);
+
+      if($scope.pushNotification.checked) {
+
+        // call to register automatically upon device ready
+        ionPlatform.ready.then(function (device) {
+           $scope.register();
+        });
+      } else {
+
+        // call to register automatically upon device ready
+        ionPlatform.ready.then(function (device) {
+           $scope.unregister();
+        });
+      }
+    };
+    $scope.pushNotification = { checked: false };
+
 
     // Register
     $scope.register = function () {
@@ -152,7 +220,7 @@ console.log('AlertsCtrl');
         // ** NOTE: Android regid result comes back in the pushNotificationReceived, only iOS returned here
         if (ionic.Platform.isIOS()) {
           $scope.regId = result;
-          //storeDeviceToken("ios");
+          storeDeviceToken("ios");
         }
       }, function (err) {
         console.log("Register error " + err)
@@ -179,6 +247,8 @@ console.log('AlertsCtrl');
       // The app was already open but we'll still show the alert and sound the tone received this way. If you didn't check
       // for foreground here it would make a sound twice, once when received in background and upon opening it from clicking
       // the notification when this code runs (weird).
+
+      alert('notification received');
       if (notification.foreground == "1") {
         // Play custom audio if a sound specified.
         if (notification.sound) {
@@ -218,7 +288,7 @@ console.log('AlertsCtrl');
       var user = { user: 'user' + Math.floor((Math.random() * 10000000) + 1), type: type, token: $scope.regId };
       console.log("Post token for registered device with data " + JSON.stringify(user));
 
-      $http.post('http://mobile.ng.bluemix.net/imfpushdashboard/?appGuid=0c6a21ba-aff4-40b3-9baf-89929d2976e3', JSON.stringify(user))
+      $http.post('http://76.11.75.113:8000/subscribe', JSON.stringify(user))
         .success(function (data, status) {
           console.log("Token stored, device is successfully subscribed to receive push notifications.");
         })
@@ -234,7 +304,7 @@ console.log('AlertsCtrl');
     // previously so multiple userids will be created with the same token unless you add code to check).
     function removeDeviceToken() {
       var tkn = {"token": $scope.regId};
-      $http.post('http://192.168.1.16:8000/unsubscribe', JSON.stringify(tkn))
+      $http.post('http://76.11.75.113:8000/unsubscribe', JSON.stringify(tkn))
         .success(function (data, status) {
           console.log("Token removed, device is successfully unsubscribed and will not receive push notifications.");
         })
@@ -265,57 +335,76 @@ console.log('AlertsCtrl');
 
 })
 
-.controller('MapController',
-  [ "$scope", "leafletData", function($scope, leafletData) {
-//sample data values for populate map
-    var data = [
-      {"loc":[41.575330,13.102411], "title":"aquamarine"},
-      {"loc":[41.575730,13.002411], "title":"black"},
-      {"loc":[41.807149,13.162994], "title":"blue"},
-      {"loc":[41.507149,13.172994], "title":"chocolate"},
-      {"loc":[41.847149,14.132994], "title":"coral"},
-      {"loc":[41.219190,13.062145], "title":"cyan"},
-      {"loc":[41.344190,13.242145], "title":"darkblue"},
-      {"loc":[41.679190,13.122145], "title":"darkred"},
-      {"loc":[41.329190,13.192145], "title":"darkgray"},
-      {"loc":[41.379290,13.122545], "title":"dodgerblue"},
-      {"loc":[41.409190,13.362145], "title":"gray"},
-      {"loc":[41.794008,12.583884], "title":"green"},
-      {"loc":[41.805008,12.982884], "title":"greenyellow"},
-      {"loc":[41.536175,13.273590], "title":"red"},
-      {"loc":[41.516175,13.373590], "title":"rosybrown"},
-      {"loc":[41.506175,13.173590], "title":"royalblue"},
-      {"loc":[41.836175,13.673590], "title":"salmon"},
-      {"loc":[41.796175,13.570590], "title":"seagreen"},
-      {"loc":[41.436175,13.573590], "title":"seashell"},
-      {"loc":[41.336175,13.973590], "title":"silver"},
-      {"loc":[41.236175,13.273590], "title":"skyblue"},
-      {"loc":[41.546175,13.473590], "title":"yellow"},
-      {"loc":[41.239190,13.032145], "title":"white"}
-    ];
+  .controller('MapController',
+  [ "$scope", "LocationsService", function($scope, LocationsService) {
+    console.log('MapController');
 
-    var map = new L.Map('map', {zoom: 9, center: new L.latLng(data[0].loc) });	//set center from first location
+    var restaurant500 = LocationsService.all();
 
-    map.addLayer(new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'));	//base layer
+    console.log('after rest...');
 
-    var markersLayer = new L.LayerGroup();	//layer contain searched elements
-    map.addLayer(markersLayer);
+    var map = L.map('map', {
+      zoom: 12,
+      center: new L.latLng(  restaurant500.coordinates[0],  restaurant500.coordinates[1]), //Default Location
+      layers: L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'),
+      events: {
+        map: {
+          enable: ['context'],
+          logic: 'emit'
+        }
+      }
+    });
 
-    map.addControl( new L.Control.Search({
-      container: 'findbox',
-      layer: markersLayer,
-      initial: false,
-      collapsed: false
-    }) );
-    //inizialize search control
+    console.log('after map...');
 
-    ////////////populate map with markers from sample data
-    for(i in data) {
-      var title = data[i].title,	//value searched
-        loc = data[i].loc,		//position found
-        marker = new L.Marker(new L.latLng(loc), {title: title} );//se property searched
-      marker.bindPopup('title: '+ title );
-      markersLayer.addLayer(marker);
-    }
+    var restLayers = L.geoJson(restaurant500, {
+      pointToLayer: function(feature, latlng) {
+
+        var props = L.Util.extend({
+            'name': '',
+            'cuisine': '',
+            'website': '',
+            'phone': ''
+          },feature.properties),
+          textPopup = L.Util.template(feature.properties.popuptext, props),
+
+          style = {
+            radius: 10,
+            opacity: 0.8,
+            fillColor: feature.properties.status == "Pass" ? '#00ff00' : (feature.properties.status == "Multi" ? '#0000FF' :'#FFC200'),
+            fillOpacity: 0.8
+          };
+
+        return L.circleMarker(latlng, style).bindPopup(textPopup);
+      }
+    }).addTo(map);
+
+    //L.control.locate.addTo(map);
+
+    var fuse = new Fuse(restaurant500.features, {
+      keys: ['properties.tags']
+    });
+
+    L.control.search({
+      zoom: 15,
+      layer: restLayers,
+      propertyName: 'tags',
+      filterData: function(text, records) {
+        var jsons = fuse.search(text),
+          ret = {}, key;
+
+        for(var i in jsons) {
+          key = jsons[i].properties.tags;
+          ret[ key ]= records[key];
+        }
+
+        console.log(jsons,ret);
+        return ret;
+      }
+    })
+      .on('search_locationfound', function(e) {
+        e.layer.openPopup();
+      })
+      .addTo(map);
 
   }]);

@@ -5,14 +5,14 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.services' is found in services.js
 // 'starter.controllers' is found in controllers.js
-angular.module('starter', ['ionic', 'starter.controllers', 'starter.services','leaflet-directive', 'ngCordova', 'igTruncate'])
+angular.module('starter', ['ionic', 'starter.controllers', 'starter.services','leaflet-directive', 'ngCordova'])
 
 .run(function($ionicPlatform, $cordovaPush) {
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
     if(window.cordova && window.cordova.plugins.Keyboard) {
-      cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
+      /*cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);*/
     }
     if(window.StatusBar) {
       // org.apache.cordova.statusbar required
@@ -93,6 +93,24 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services','l
         'tab-feed': {
           templateUrl: 'templates/feed.html',
           controller: 'FeedCtrl'
+        }
+      }
+    })
+    .state('tab.about', {
+      url: '/about',
+      views: {
+        'tab-settings': {
+          templateUrl: 'templates/aboutus.html',
+          controller: 'AboutCtrl'
+        }
+      }
+    })
+    .state('tab.contact', {
+      url: '/contact',
+      views: {
+        'tab-settings': {
+          templateUrl: 'templates/contactus.html',
+          controller: 'ContactCtrl'
         }
       }
     })

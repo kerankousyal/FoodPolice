@@ -1,6 +1,16 @@
 <ion-view title="Alerts">
 
-  <ion-content class="padding">
-    <h1>Alerts here</h1>
+  <ion-content ng-init="init()">
+    <!--<ion-spinner icon="ripple" class="spinner-assertive"></ion-spinner>-->
+    <div class="list">
+
+      <div class="item item-button-right" ng-repeat="entry in entries">
+        <b ng-click="browse(entry.link)">{{entry.title}}</b><br>
+        <span ng-click="browse(entry.link)">{{entry.publishedDate}}</span>
+        <a class="button button-light" ng-click="shareAnywhere(entry.title,entry.link)">
+          <i class="ion ion-ios-upload-outline"></i>
+        </a>
+      </div>
+    </div>
   </ion-content>
 </ion-view>

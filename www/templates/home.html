@@ -6,26 +6,30 @@
   </ion-nav-buttons>
 
   <ion-content>
+    <form ng-submit="searchFacility(strsearch)">
+      <div class="list list-inset">
+        <label class="item item-input item-select">
+          <div class="input-label">
+            Select City
+          </div>
+          <select>
+            <option selected>Toronto</option>
+          </select>
+        </label>
 
-    <div class="list list-inset">
-      <label class="item item-input item-select">
-        <div class="input-label">
-          Select City
-        </div>
-        <select>
-          <option selected>Toronto</option>
-        </select>
-      </label>
-      <label class="item item-input">
-        <input type="text" placeholder="Establishment Name">
-      </label>
-    </div>
+        <label class="item item-input">
+          <i class="icon ion-search placeholder-icon"></i>
+          <input type="text" placeholder="Search Establishment by Name" ng-model="strsearch" name="strsearch">
+        </label>
+      </div>
+    </form>
+
     <div class="list list-inset">
       <ion-list>
         <ion-item ng-repeat="facility in facilitylist" type="item-text-wrap" href="#/tab/home/facility/{{facility.id}}">
-          {{facility.name}}
+          {{facility.ESTABLISHMENT_NAME}}
         </ion-item>
       </ion-list>
-      </div>
+    </div>
   </ion-content>
 </ion-view>
