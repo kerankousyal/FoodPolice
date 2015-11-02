@@ -20,7 +20,7 @@ angular.module('starter.services').factory('LocationsService', [ function() {
           "address" : "20 RONCESVALLES AVE",
           "status": "Pass",
           "popuptext": "<div><strong>20 RONCESVALLES AVE</strong></div><hr>" +
-          "<div><button class='button icon-left ion-star button-balanced' href='#/tab/home/facility/10479655'><strong style='text-decoration: underline; cursor: pointer;'>GINGER EXPRESS</strong></button><a class='button button-icon icon ion-alert-circled'>Report</a><br>Last inspected: Jul 27, 2015</div>"
+          "<div><a class='button icon-left ion-star button-balanced' href='#/tab/home/facility/10479655'><strong style='text-decoration: underline; cursor: pointer;'>GINGER EXPRESS</strong></a><a class='button button-icon icon ion-alert-circled'>Report</a><br>Last inspected: Jul 27, 2015</div>"
         },
         "geometry": {
           "type": "Point",
@@ -41,7 +41,7 @@ angular.module('starter.services').factory('LocationsService', [ function() {
           "status": "Multi",
           "popuptext": "<div><strong>222 LANSDOWNE AVE</strong><br>2 establishments at this address</div><hr>" +
           "<div><a class='button icon-left ion-star button-balanced' href='#/tab/home/facility/10479657'><strong style='text-decoration: underline; cursor: pointer;'>PARISCO CAFE</strong></a><a class='button button-icon icon ion-alert-circled'>Report</a><br>Last inspected: Jul 27, 2015" +
-          "<button class='button icon-left ion-star button-energized' href='#/tab/home/facility/10479658'><strong style='text-decoration: underline; cursor: pointer;'>PETER'S NO FRILLS</strong></button><a class='button button-icon icon ion-alert-circled'>Report</a><br>Last inspected: Jul 27, 2015 </div>"
+          "<a class='button icon-left ion-star button-energized' href='#/tab/home/facility/10479658'><strong style='text-decoration: underline; cursor: pointer;'>PETER'S NO FRILLS</strong></a><a class='button button-icon icon ion-alert-circled'>Report</a><br>Last inspected: Jul 27, 2015 </div>"
         },
         "geometry": {
           "type": "Point",
@@ -61,7 +61,7 @@ angular.module('starter.services').factory('LocationsService', [ function() {
           "address" : "3160 EGLINTON AVE E",
           "status": "ConditionalPass",
           "popuptext": "<div><strong>3160 EGLINTON AVE E</strong></div><hr>" +
-          "<div><button class='button icon-left ion-star button-energized' href='#/tab/home/facility/10479656'><strong style='text-decoration: underline; cursor: pointer;'>ROYAL BREAD BAKERY</strong></button><a class='button button-icon icon ion-alert-circled'>Report</a><br>Last inspected: Jul 27, 2015</div>"
+          "<div><a class='button icon-left ion-star button-energized' href='#/tab/home/facility/10479656'><strong style='text-decoration: underline; cursor: pointer;'>ROYAL BREAD BAKERY</strong></a><a class='button button-icon icon ion-alert-circled'>Report</a><br>Last inspected: Jul 27, 2015</div>"
         },
         "geometry": {
           "type": "Point",

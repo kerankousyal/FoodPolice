@@ -42,7 +42,7 @@ console.log('AlertsCtrl');
     });
 
 })
-  .controller('ReportCtrl', function($scope,$ionicPlatform, $cordovaCamera, $cordovaFile, $cordovaSocialSharing,$ionicLoading,$ionicScrollDelegate, $timeout, $q,UploadService) {
+  .controller('ReportCtrl', function($scope,$ionicPlatform, $cordovaCamera, $cordovaFile, $cordovaSocialSharing,$ionicLoading,$ionicScrollDelegate, $timeout, $q,UploadService, $cordovaToast) {
 
     console.log('ReportCtrl');
 
@@ -78,13 +78,22 @@ console.log('AlertsCtrl');
 
       var imageData= { "imageURL": $scope.image, "name" : user.name, "content" : user.content } ;
 
+      /*$ionicLoading.show({
+        noBackdrop: true,
+        template: '<p class="item-icon-left">Submitting report...<ion-spinner icon="lines"/></p>'
+      });*/
+
+      $cordovaToast.showShortCenter('Report submitted successfully!');
+
       UploadService.Upload(imageData)
                   .then(function (response) {
                     if (response.success) {
 
-                     console.log('image uploaded!');
+                      $ionicLoading.hide();
+
+                      $cordovaToast.showShortCenter('Report submitted successfully!');
                     } else {
-                      console.log('image upload failed!');
+                      $cordovaToast.showShortCenter('Report failed! try again!');
                     }
                   });
     };
@@ -106,26 +115,27 @@ console.log('AlertsCtrl');
       }
     });
   })
-  .controller('FeedCtrl', function($scope,$ionicPlatform, $cordovaSocialSharing, NewsFeedService) {
+  .controller('FeedCtrl', function($scope,$ionicPlatform, $cordovaSocialSharing, NewsFeedService, $ionicLoading) {
 
-    console.log('FeedCtrl');
+    $ionicLoading.show({
+      noBackdrop: true,
+      template: '<p class="item-icon-left">Loading News...<ion-spinner icon="lines"/></p>'
+    });
 
-    //get news feed from db
-    $scope.getAllNewsFeeds = function () {
+    getAllNewsFeeds();
 
-      console.log('loading feeds');
+      function getAllNewsFeeds() {
 
+        NewsFeedService.getAllFeeds()
+          .then(function (feeds) {
 
-      NewsFeedService.getAllFeeds()
-        .then(function (response) {
-          if (response.success) {
+            $ionicLoading.hide();
 
-            $scope.feedList=response;
-          } else {
-            console.log('get feeds failed!');
-          }
-        });
-    };
+            $scope.feedList = feeds.data;
+
+          });
+      }
+
 
     //social sharing
     $ionicPlatform.ready(function() {
@@ -150,12 +160,15 @@ console.log('AlertsCtrl');
   .controller('HomeCtrl', function($scope, FacilityService) {
     console.log('HomeCtrl');
     $scope.strsearch = '';
-    $scope.facilitylist = [];
+    $scope.facilitylist = FacilityService.all();
     $scope.searchFacility = function(strsearch) {
       console.log('Hello' + strsearch);
-      if (strsearch !='') {
+      if (strsearch !='' & strsearch.length >1) {
         $scope.facilitylist = FacilityService.search(strsearch);
         $scope.strsearch = '';
+      }else if(strsearch =='')
+      {
+        $scope.facilitylist = FacilityService.all();
       }
     };
 
@@ -220,7 +233,7 @@ console.log('AlertsCtrl');
         // ** NOTE: Android regid result comes back in the pushNotificationReceived, only iOS returned here
         if (ionic.Platform.isIOS()) {
           $scope.regId = result;
-          storeDeviceToken("ios");
+          storeDeviceToken("A");
         }
       }, function (err) {
         console.log("Register error " + err)
@@ -248,7 +261,7 @@ console.log('AlertsCtrl');
       // for foreground here it would make a sound twice, once when received in background and upon opening it from clicking
       // the notification when this code runs (weird).
 
-      alert('notification received');
+
       if (notification.foreground == "1") {
         // Play custom audio if a sound specified.
         if (notification.sound) {
@@ -285,10 +298,10 @@ console.log('AlertsCtrl');
     // type:  Platform type (ios, android etc)
     function storeDeviceToken(type) {
       // Create a random userid to store with it
-      var user = { user: 'user' + Math.floor((Math.random() * 10000000) + 1), type: type, token: $scope.regId };
+      var user = {  createdMode: 'API', deviceId: 'user' + Math.floor((Math.random() * 10000000) + 1), platform: type, token: $scope.regId };
       console.log("Post token for registered device with data " + JSON.stringify(user));
 
-      $http.post('http://76.11.75.113:8000/subscribe', JSON.stringify(user))
+      $http.post('https://mobile.ng.bluemix.net/imfpush/v1/apps/b2b33425-6f1f-4fa7-852f-0041599a1149/devices?mfpPushEnableBroadcast=true', JSON.stringify(user))
         .success(function (data, status) {
           console.log("Token stored, device is successfully subscribed to receive push notifications.");
         })
@@ -304,7 +317,7 @@ console.log('AlertsCtrl');
     // previously so multiple userids will be created with the same token unless you add code to check).
     function removeDeviceToken() {
       var tkn = {"token": $scope.regId};
-      $http.post('http://76.11.75.113:8000/unsubscribe', JSON.stringify(tkn))
+      $http.post('https://mobile.ng.bluemix.net/imfpush/v1/apps/b2b33425-6f1f-4fa7-852f-0041599a1149/devices/', JSON.stringify(tkn))
         .success(function (data, status) {
           console.log("Token removed, device is successfully unsubscribed and will not receive push notifications.");
         })

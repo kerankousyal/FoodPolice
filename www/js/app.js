@@ -97,7 +97,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services','l
       }
     })
     .state('tab.about', {
-      url: '/about',
+      url: '/settings/about',
       views: {
         'tab-settings': {
           templateUrl: 'templates/aboutus.html',
@@ -106,7 +106,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services','l
       }
     })
     .state('tab.contact', {
-      url: '/contact',
+      url: '/settings/contact',
       views: {
         'tab-settings': {
           templateUrl: 'templates/contactus.html',

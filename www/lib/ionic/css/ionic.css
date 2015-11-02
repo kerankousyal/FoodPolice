@@ -3271,7 +3271,7 @@ a.subdued {
     background: none;
     box-shadow: none;
     color: #444;
-    font-size: 17px; }
+    font-size: 20px; }
   .bar-stable .button.button-icon {
     border-color: transparent;
     background: none; }
@@ -3779,8 +3779,8 @@ a.subdued {
   background-color: #444;
   background-image: none; }
 .tabs-striped.tabs-color-light .tab-item {
-  color: rgba(255, 255, 255, 0.4);
-  opacity: 1; }
+  color: white;
+  opacity: 10; }
   .tabs-striped.tabs-color-light .tab-item .badge {
     opacity: 0.4; }
   .tabs-striped.tabs-color-light .tab-item.tab-item-active, .tabs-striped.tabs-color-light .tab-item.active, .tabs-striped.tabs-color-light .tab-item.activated {
@@ -4152,7 +4152,7 @@ ion-tabs.tabs-color-active-dark .tab-item {
   font-size: 32px; }
 
 .tabs-icon-left.tabs .tab-item, .tabs-icon-left > .tabs .tab-item, .tabs-icon-right.tabs .tab-item, .tabs-icon-right > .tabs .tab-item {
-  font-size: 10px; }
+  font-size: 15px; }
   .tabs-icon-left.tabs .tab-item .icon, .tabs-icon-left > .tabs .tab-item .icon, .tabs-icon-right.tabs .tab-item .icon, .tabs-icon-right > .tabs .tab-item .icon {
     display: inline-block;
     vertical-align: top;
@@ -5740,7 +5740,7 @@ input, button, select, textarea {
   padding: 7px 10px 7px 0px;
   max-width: 200px;
   width: 35%;
-  color: #444;
+  color: #2c3e50;
   font-size: 16px; }
 
 .placeholder-icon {
@@ -5794,7 +5794,7 @@ textarea, input[type="text"], input[type="password"], input[type="datetime"], in
   height: 34px;
   color: #111;
   vertical-align: middle;
-  font-size: 14px;
+  font-size: 15px;
   line-height: 16px; }
 
 .platform-ios input[type="datetime-local"], .platform-ios input[type="date"], .platform-ios input[type="month"], .platform-ios input[type="time"], .platform-ios input[type="week"], .platform-android input[type="datetime-local"], .platform-android input[type="date"], .platform-android input[type="month"], .platform-android input[type="time"], .platform-android input[type="week"] {
@@ -6379,7 +6379,7 @@ input[type="radio"][disabled], input[type="checkbox"][disabled], input[type="rad
     text-indent: 0.01px;
     text-overflow: '';
     white-space: nowrap;
-    font-size: 14px;
+    font-size: 15px;
     cursor: pointer;
     direction: rtl; }
   .item-select select::-ms-expand {
@@ -6636,7 +6636,7 @@ progress {
       border-color: transparent;
       background: none;
       box-shadow: none;
-      color: #ef473a; }
+      color: #e74c3c; }
     .button.button-assertive.button-icon {
       border-color: transparent;
       background: none; }

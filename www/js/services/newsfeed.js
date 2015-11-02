@@ -17,25 +17,21 @@
 
     function getAllFeeds() {
 
-      var deferred = $q.defer();
-
-      $timeout(function () {
-
-
-
-        //save user to the DB
-        $http.get('http://www.primeimap.com/FoodCop/rest/fprest/getfeeds')
-          .success(function (response) {
-
-            deferred.resolve({ success: true });
-          });
-
-
-      }, 1000);
-
-      return deferred.promise;
+      return $http.get('http://www.primeimap.com/FoodCop/rest/fprest/getfeeds').then(handleSuccess, handleError('Error getting feed list'));
     }
 
 
+  }
+
+  // private functions
+  function handleSuccess(data) {
+
+    return data;
+  }
+
+  function handleError(error) {
+    return function () {
+      return { success: false, message: error };
+    };
   }
 })();
