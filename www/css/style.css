@@ -11,18 +11,21 @@
   stroke: #999;
   fill: #999;
 }
-.orange {
-  color: orange;
-}
+
 .red {
   color: red;
 }
 .gray {
   color: gray;
 }
-.green {
-  color: green;
-}
+
 .hideElement{
   display: none;
 }
+
+.orange {
+   color: #ffc900;
+}
+ .green {
+  color: #33cd5f;
+ }

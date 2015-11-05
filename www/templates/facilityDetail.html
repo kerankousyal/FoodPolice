@@ -9,7 +9,7 @@
 
     <div class="list card">
       <div class="item item-avatar" >
-        <img src="img/{{facility.ESTABLISHMENT_STATUS}}.png" ></img>
+        <img src="img/{{facility.ESTABLISHMENT_STATUS}}.png" />
         <h2 ng-class="{'green': facility.ESTABLISHMENT_STATUS == 'Pass',
                                                     'orange': facility.ESTABLISHMENT_STATUS == 'ConditionalPass',
                                                     'red': facility.ESTABLISHMENT_STATUS == 'Failed',
@@ -31,7 +31,7 @@
             Report
           </a>
         </div>
-        <div class="card" ng-repeat="inspection in facility.inspections">
+        <div class="card" ng-repeat="inspection in facility.inspections | orderBy:'-INSPECTION_YEAR'">
 
 
           <div class="item item-divider" >
@@ -39,7 +39,7 @@
                                                     'orange': inspection.ESTABLISHMENT_STATUS == 'ConditionalPass',
                                                     'red': inspection.ESTABLISHMENT_STATUS == 'Failed',
                                                     'gray': inspection.ESTABLISHMENT_STATUS == '' } ">
-              <i class="ion-ios-checkmark-outline"></i>  {{inspection.ESTABLISHMENT_STATUS}} <b>{{inspection.INSPECTION_YEAR}}</b></div>
+              <i class="ion-ios-checkmark-outline"></i>  {{inspection.ESTABLISHMENT_STATUS}} <span style="color:black;" class="item-note">{{inspection.INSPECTION_YEAR}}</span></div>
           </div>
 
           <div class="item item-text-wrap" ng-repeat="item in inspection.infractions">
@@ -48,8 +48,10 @@
                                                     'orange': item.SEVERITY == 'S - Significant',
                                                     'red': item.SEVERITY == 'C - Crucial',
                                                     'gray': item.SEVERITY == 'NA - Not Applicable' } ">
-                <i class="ion-ios-compose-outline"></i>  {{item.SEVERITY}}</div>
-              <div class="col" style="text-align: right"><b>Date: </b>{{item.INSPECTION_DATE}}</div>
+                <i class="ion-ios-compose-outline"></i>  {{item.SEVERITY}}
+                <span style="color:black;" class="item-note">{{item.INSPECTION_DATE}}</span>
+              </div>
+
             </div>
             <div class="row responsive-sm" ng-class="{'hideElement': item.INFRACTION_DETAILS!= ''}">
               <div class="col"><i>No observation recorded. </i></div>

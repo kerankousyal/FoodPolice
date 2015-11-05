@@ -26,7 +26,11 @@
 
     <div class="list list-inset">
       <ion-list>
-        <ion-item ng-repeat="facility in facilitylist" type="item-text-wrap" href="#/tab/home/facility/{{facility.id}}">
+        <ion-item ng-repeat="facility in facilitylist" type="item-text-wrap" href="#/tab/home/facility/{{facility.id}}"
+                  ng-class="{'green': facility.ESTABLISHMENT_STATUS == 'Pass',
+                                                    'orange': facility.ESTABLISHMENT_STATUS == 'ConditionalPass',
+                                                    'red': facility.ESTABLISHMENT_STATUS == 'Failed',
+                                                    'gray': facility.ESTABLISHMENT_STATUS == '' } ">
           {{facility.ESTABLISHMENT_NAME}}
         </ion-item>
       </ion-list>

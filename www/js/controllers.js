@@ -85,18 +85,28 @@ console.log('AlertsCtrl');
 
       $cordovaToast.showShortCenter('Report submitted successfully!');
 
-      UploadService.Upload(imageData)
-                  .then(function (response) {
-                    if (response.success) {
+      UploadImage();
 
-                      $ionicLoading.hide();
+      function UploadImage() {
 
-                      $cordovaToast.showShortCenter('Report submitted successfully!');
-                    } else {
-                      $cordovaToast.showShortCenter('Report failed! try again!');
-                    }
-                  });
+        UploadService.UploadAndNofity(imageData)
+          .then(function (response) {
+            if (response.success=true) {
+
+              $ionicLoading.hide();
+
+              $cordovaToast.showShortCenter('Report submitted successfully!');
+            } else {
+              $cordovaToast.showShortCenter('Report failed! try again!');
+            }
+          });
+
+      }
+
+
     };
+
+
 
     //social sharing
     $ionicPlatform.ready(function() {
@@ -384,7 +394,7 @@ console.log('AlertsCtrl');
           style = {
             radius: 10,
             opacity: 0.8,
-            fillColor: feature.properties.status == "Pass" ? '#00ff00' : (feature.properties.status == "Multi" ? '#0000FF' :'#FFC200'),
+            fillColor: feature.properties.status == "Pass" ? '#33cd5f' : (feature.properties.status == "Multi" ? '#0000FF' :'#ffc900'),
             fillOpacity: 0.8
           };
 
